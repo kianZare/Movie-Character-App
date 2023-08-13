@@ -22,7 +22,7 @@ export const allCharacters = [
     name: "Rick Sanchez",
     status: "Dead",
     species: "Human",
-    type: "",
+    type: "", 
     gender: "Male",
     origin: {
       name: "Earth (C-137)",

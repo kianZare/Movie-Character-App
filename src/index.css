@@ -40,6 +40,24 @@ button {
   background-color: var(--slate-500);
   font-size: 1.1rem;
 }
+@media only screen and (max-width: 480px) {
+  .text-field {
+    padding: 0.7rem 0.4rem;
+    border-radius: 0.5rem;
+    color: var(--slate-100);
+    background-color: var(--slate-500);
+    font-size: 0.9rem;
+  }
+}
+@media only screen and (max-width: 370px) {
+  .text-field {
+    padding: 0.7rem 0.2rem;
+    border-radius: 0.5rem;
+    color: var(--slate-100);
+    background-color: var(--slate-500);
+    font-size: 0.7rem;
+  }
+}
 
 .text-field::placeholder {
   color: var(--slate-400);
