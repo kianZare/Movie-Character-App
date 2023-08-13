@@ -5,3 +5,4 @@ function CharactorDetail() {
 }
 
 export default CharactorDetail;
+ 
