@@ -10,6 +10,17 @@
     padding: 0.5rem;
   }
 }
+.app{
+  display: flex;
+  gap: 2rem;
+}
+@media only screen and (max-width: 768px) {
+  .app{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
 
 .navbar {
   position: relative;
@@ -67,7 +78,6 @@
 }
 
 .characters-list {
-  
   width: 40%;
 }
 @media only screen and (max-width: 768px) {
@@ -204,6 +214,15 @@
   background-color: var(--slate-800);
   border-radius: 1rem;
   padding: 1rem;
+}
+@media only screen and (max-width: 425px) {
+  .character-episodes {
+    /* border: 1px solid var(--slate-300); */
+    background-color: var(--slate-800);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    font-size: smaller;
+  }
 }
 
 .character-episodes .title {

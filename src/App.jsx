@@ -6,10 +6,12 @@ import { allCharacters } from "../data/data";
 
 function App() {
   return (
-    <div className="app">
+    <div>
       <Navbar />
+      <div className="app">
       <CharactorList characters={allCharacters} />
       <CharactorDetail />
+      </div>
     </div>
   );
 }
