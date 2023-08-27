@@ -10,15 +10,15 @@
     padding: 0.5rem;
   }
 }
-.app{
+.main{
   display: flex;
   gap: 2rem;
 }
 @media only screen and (max-width: 768px) {
-  .app{
+  .main{
     display: flex;
-    flex-direction: column;
     gap: 2rem;
+    flex-direction: column;
   }
 }
 
@@ -79,6 +79,21 @@
 
 .characters-list {
   width: 40%;
+  max-height: 620px;
+  overflow: auto;
+
+}
+@media only screen and (max-width: 768px) {
+  .characters-list {
+    width: 100%;
+    /* padding: 0 1rem; */
+  }
+}
+.loader {
+  width: 40%;
+  color: aliceblue;
+  font-size: 22px;
+  text-align: center;
 }
 @media only screen and (max-width: 768px) {
   .characters-list {
@@ -214,6 +229,8 @@
   background-color: var(--slate-800);
   border-radius: 1rem;
   padding: 1rem;
+  max-height: 350px;
+  overflow: auto;
 }
 @media only screen and (max-width: 425px) {
   .character-episodes {
