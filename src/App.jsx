@@ -13,13 +13,17 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [favourites, setFavourites] = useState([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     async function fetchData() {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character/?name=${query}`
+          `https://rickandmortyapi.com/api/character/?name=${query}`,
+          { signal }
         );
         setCaracters(data.results);
       } catch (err) {
@@ -30,7 +34,18 @@ function App() {
       }
     }
     fetchData();
+
+    return () => {
+      controller.abort();
+    };
   }, [query]);
+
+  useEffect(() => {
+    const interval = setInterval(() => setCount((c) => c + 1), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [count]);
 
   const handleSelectCharacter = (id) => {
     setSelectedId((privId) => (privId === id ? null : id));
@@ -48,6 +63,7 @@ function App() {
         <SearchResult numOfResult={characters.length} />
         <Favourites numOfFavourites={favourites.length} />
       </Navbar>
+      <div style={{ color: "white" }}>{count}</div>
       <Main>
         <CharactorList
           selectedId={selectedId}
