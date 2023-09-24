@@ -40,24 +40,6 @@ button {
   background-color: var(--slate-500);
   font-size: 1.1rem;
 }
-@media only screen and (max-width: 480px) {
-  .text-field {
-    padding: 0.7rem 0.4rem;
-    border-radius: 0.5rem;
-    color: var(--slate-100);
-    background-color: var(--slate-500);
-    font-size: 0.9rem;
-  }
-}
-@media only screen and (max-width: 370px) {
-  .text-field {
-    padding: 0.7rem 0.2rem;
-    border-radius: 0.5rem;
-    color: var(--slate-100);
-    background-color: var(--slate-500);
-    font-size: 0.7rem;
-  }
-}
 
 .text-field::placeholder {
   color: var(--slate-400);
@@ -96,7 +78,7 @@ button {
   width: 98%;
   min-height: 250px;
   position: absolute;
-  top: 50%;
+  top: 500%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--slate-900);
@@ -138,5 +120,5 @@ button {
   height: 100vh;
   position: fixed;
   inset: 0;
-  background-color: rgba(63, 69, 76, 0.8);
+  background-color: rgba(61, 65, 70, 0.8);
 }

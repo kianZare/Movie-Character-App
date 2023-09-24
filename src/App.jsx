@@ -1,18 +1,19 @@
+import { useEffect, useState } from "react";
 import "./App.css";
-import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-
-import Navbar, { SearchResult, Search, Favourites } from "./components/Navbar";
-import CharactorList from "./components/CharactorList";
-import CharactorDetail from "./components/CharactorDetail";
+import CharacterDetail from "./components/CharacterDetail";
+import CharacterList from "./components/CharacterList";
+import Navbar, { Favourites, Search, SearchResult } from "./components/Navbar";
+import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 
 function App() {
-  const [characters, setCaracters] = useState([]);
+  const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [favourites, setFavourites] = useState([]);
+  const [favourites, setFavourites] = useState(
+    () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
+  );
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -25,14 +26,20 @@ function App() {
           `https://rickandmortyapi.com/api/character/?name=${query}`,
           { signal }
         );
-        setCaracters(data.results);
+        setCharacters(data.results.slice(0, 20));
       } catch (err) {
-        setCaracters([]);
-        toast.error(err.message);
+        // fetch => err.name ==="AbortError"
+        // axios => axios.isCancel()
+        if (!axios.isCancel()) {
+          setCharacters([]);
+          toast.error(err.response.data.error);
+        }
       } finally {
         setIsLoading(false);
       }
     }
+
+
     fetchData();
 
     return () => {
@@ -42,17 +49,31 @@ function App() {
 
   useEffect(() => {
     const interval = setInterval(() => setCount((c) => c + 1), 1000);
+
+    // return function(){}
     return () => {
       clearInterval(interval);
     };
   }, [count]);
 
+  useEffect(() => {
+    localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
+  }, [favourites]);
+
+  // console.log(JSON.parse(localStorage.getItem("FAVOURITES")));
+
   const handleSelectCharacter = (id) => {
-    setSelectedId((privId) => (privId === id ? null : id));
+    setSelectedId((prevId) => (prevId === id ? null : id));
   };
+
   const handleAddFavourite = (char) => {
-    setFavourites(() => [...favourites, char]);
+    setFavourites((preFav) => [...preFav, char]);
   };
+
+  const handleDeleteFavourite = (id) => {
+    setFavourites((preFav) => preFav.filter((fav) => fav.id !== id));
+  };
+
   const isAddToFavourite = favourites.map((fav) => fav.id).includes(selectedId);
 
   return (
@@ -61,18 +82,19 @@ function App() {
       <Navbar>
         <Search query={query} setQuery={setQuery} />
         <SearchResult numOfResult={characters.length} />
-        <Favourites numOfFavourites={favourites.length} />
+        <Favourites
+          favourites={favourites}
+          onDeleteFavourite={handleDeleteFavourite}
+        />
       </Navbar>
-      <div style={{ color: "white" }}>{count}</div>
       <Main>
-        <CharactorList
+        <CharacterList
           selectedId={selectedId}
           characters={characters}
           isLoading={isLoading}
-          onSelectCharecter={handleSelectCharacter}
+          onSelectCharacter={handleSelectCharacter}
         />
-        <CharactorDetail
-          characters={characters}
+        <CharacterDetail
           selectedId={selectedId}
           onAddFavourite={handleAddFavourite}
           isAddToFavourite={isAddToFavourite}
