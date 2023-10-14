@@ -3,49 +3,24 @@ import "./App.css";
 import CharacterDetail from "./components/CharacterDetail";
 import CharacterList from "./components/CharacterList";
 import Navbar, { Favourites, Search, SearchResult } from "./components/Navbar";
-import { Toaster, toast } from "react-hot-toast";
-import axios from "axios";
+import { Toaster } from "react-hot-toast";
+import useCharacters from "./hooks/useCharacter";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
-  const [characters, setCharacters] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
-  const [favourites, setFavourites] = useState(
-    () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
-  );
   const [count, setCount] = useState(0);
+  const {isLoading, characters} = useCharacters(query)
+  const [selectedId, setSelectedId] = useState(null);
+ const [favourites, setFavourites] = useLocalStorage("FAVOURITES", [])
+  // const [favourites, setFavourites] = useState(
+  //   () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
+  // );
+ 
+  // useEffect(() => {
+  //   localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
+  // }, [favourites]);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    async function fetchData() {
-      try {
-        setIsLoading(true);
-        const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character/?name=${query}`,
-          { signal }
-        );
-        setCharacters(data.results.slice(0, 20));
-      } catch (err) {
-        // fetch => err.name ==="AbortError"
-        // axios => axios.isCancel()
-        if (!axios.isCancel()) {
-          setCharacters([]);
-          toast.error(err.response.data.error);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-
-    fetchData();
-
-    return () => {
-      controller.abort();
-    };
-  }, [query]);
 
   useEffect(() => {
     const interval = setInterval(() => setCount((c) => c + 1), 1000);
@@ -56,9 +31,6 @@ function App() {
     };
   }, [count]);
 
-  useEffect(() => {
-    localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
-  }, [favourites]);
 
   // console.log(JSON.parse(localStorage.getItem("FAVOURITES")));
 
